@@ -11,6 +11,9 @@ FROM resin/rpi-raspbian:stretch
 LABEL description="Docker container for the Raspberry Pi-specific fork of MJPEG Streamer from: https://github.com/jacksonliam/mjpg-streamer"
 LABEL maintainer="tony@tonydicola.com"
 
+RUN sudo sed -i 's/archive/legacy/g' /etc/apt/sources.list
+RUN sudo sed -i 's/archive/legacy/g' /etc/apt/sources.list.d/raspi.list
+
 # Install dependencies.
 RUN apt-get update && apt-get install -y \
     build-essential \
