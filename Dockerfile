@@ -11,6 +11,10 @@ FROM raspbian/stretch:latest
 LABEL description="Docker container for the Raspberry Pi-specific fork of MJPEG Streamer from: https://github.com/jacksonliam/mjpg-streamer"
 LABEL maintainer="tony@tonydicola.com"
 
+RUN ls -la /etc/apt
+RUN cat /etc/apt/sources.list
+RUN ls -la /etc/apt/sources.list.d
+
 RUN sudo sed -i 's/archive/legacy/g' /etc/apt/sources.list
 RUN sudo sed -i 's/archive/legacy/g' /etc/apt/sources.list.d/raspi.list
 
