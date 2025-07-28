@@ -5,7 +5,7 @@
 # web output on port 8080.
 #
 # Author: Tony DiCola
-FROM resin/rpi-raspbian:stretch
+FROM raspbian/stretch:latest
 
 # Informative labels.
 LABEL description="Docker container for the Raspberry Pi-specific fork of MJPEG Streamer from: https://github.com/jacksonliam/mjpg-streamer"
