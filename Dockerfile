@@ -16,7 +16,7 @@ RUN cat /etc/apt/sources.list
 RUN ls -la /etc/apt/sources.list.d
 
 RUN sudo sed -i 's/archive/legacy/g' /etc/apt/sources.list
-RUN sudo sed -i 's/archive/legacy/g' /etc/apt/sources.list.d/raspi.list
+RUN #sudo sed -i 's/archive/legacy/g' /etc/apt/sources.list.d/raspi.list
 
 # Install dependencies.
 RUN apt-get update && apt-get install -y \
