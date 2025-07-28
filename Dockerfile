@@ -11,6 +11,9 @@ FROM resin/rpi-raspbian:stretch
 LABEL description="Docker container for the Raspberry Pi-specific fork of MJPEG Streamer from: https://github.com/jacksonliam/mjpg-streamer"
 LABEL maintainer="tony@tonydicola.com"
 
+RUN sudo sed -i 's/archive/legacy/g' /etc/apt/sources.list
+RUN sudo sed -i 's/archive/legacy/g' /etc/apt/sources.list.d/raspi.list
+
 # Install dependencies.
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -30,5 +33,5 @@ RUN make && make install && chmod +x docker-start.sh
 # mjpeg streamer with its raspberry pi input plugin.  Note that you MUST run
 # this in a privileged docker container (use --privileged with docker run).
 EXPOSE 8080/TCP
-ENTRYPOINT ["/mjpg-streamer/mjpg-streamer-experimental/docker-start.sh", "output_http.so -w ./www"]
-CMD ["input_raspicam.so"]
+#ENTRYPOINT ["/mjpg-streamer/mjpg-streamer-experimental/docker-start.sh", "output_http.so -w ./www"]
+#CMD ["input_raspicam.so"]
