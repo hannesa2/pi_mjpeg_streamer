@@ -7,12 +7,29 @@ on:
     tags:
       - '*'
   pull_request:
-    branches:
-      - 'master'
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  resourceRunID: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
+  env-job:
+    runs-on: ubuntu-latest
+    outputs:
+      modified-branch-name: ${{ steps.env.outputs.MODIFIED_BRANCH_NAME }}
+    name: Modify branch name
+    steps:
+      - name: Sets MODIFIED_BRANCH_NAME
+        id: env
+        env:
+          name: "${{env.BRANCH_NAME}}"
+        run: |
+          echo "MODIFIED_BRANCH_NAME=${name//\//-}" >> ${GITHUB_OUTPUT}
+          cat ${GITHUB_OUTPUT}
+
   container:
     runs-on: ${{ matrix.os }}
+    needs:
+      - env-job
     strategy:
       fail-fast: false
       matrix:
@@ -20,6 +37,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: show envs
+        run: |
+          echo BRANCH_NAME=${{ needs.env-job.outputs.modified-branch-name }}
+          echo GITHUB_RUN_ID=${GITHUB_RUN_ID}
       - name: Explain why this job ran
         run: echo ${{ github.event_name }} ${{ github.ref }} event triggered this step.
       - name: Docker meta
@@ -50,7 +71,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: hannesa2/pi_mjpeg_streamer:latest
+          tags: hannesa2/pi_mjpeg_streamer:${{ needs.env-job.outputs.modified-branch-name }}
           platforms: linux/arm/v7,linux/arm64
           load: true
           context: .
